@@ -1,3 +1,5 @@
+Project MVP: https://docs.google.com/document/d/12n6n8Kgt-caerhOib0yNJN5F9uRZyD5z0zcsvZH-OB0/edit?usp=sharing
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
