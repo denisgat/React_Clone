@@ -9,7 +9,9 @@ class Register extends React.Component {
             username: '',
             email: '',
             password: '',
-            confpassword: ''
+            confpassword: '',
+            token: '',
+            user: ''
         };
 
         this.handleUserChange = this.handleUserChange.bind(this);
@@ -49,11 +51,12 @@ class Register extends React.Component {
         event.preventDefault();
 
         const data = {
-            username: this.state.username,
+            name: this.state.username,
             email: this.state.email,
             password: this.state.password
         }
-        if(this.state.username === '' || this.state.email === '' || this.state.password === '' || this.state.confpassword === ''){
+
+        if (this.state.username === '' || this.state.email === '' || this.state.password === '' || this.state.confpassword === '') {
             alert('A field has been left empty, please fill out all fields')
         }
         if (this.state.password !== this.state.confpassword) {
@@ -65,17 +68,23 @@ class Register extends React.Component {
         }
 
         else {
-            await axios.post('http://127.0.0.1:8000/api/register', data)
+            let result = await axios.post('http://127.0.0.1:8000/api/register', data)
                 .then(function (response) {
                     console.log(response.data);
-                    // props.setUser(response.data.user)
+                    return response.data
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
+
+                console.log(result)
+
+            this.props.setBearToken(result.token, result.user)
+            this.props.handleLogging()
+            
+            console.log(this.state)
         }
 
-        console.log(this.state)
     }
 
     render() {

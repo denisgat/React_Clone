@@ -8,13 +8,17 @@ class Login extends React.Component {
         super(props);
         this.state = { 
             email: '',
-            password: ''
+            password: '',
+            token: '',
+            user: '',
         };
 
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+
 
     handlePasswordChange(event) {
         this.setState({ 
@@ -30,25 +34,29 @@ class Login extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state)
-        // console.log('submitted')
-
-       const data = {
-        email: this.state.email,
-        password:  this.state.password
+        
+        const data = {
+            email: this.state.email,
+            password:  this.state.password
        }
-
-        
-       await axios.post('http://127.0.0.1:8000/api/login', data)
+       
+       
+       let result = await axios.post('http://127.0.0.1:8000/api/login', data)
           .then(response => {
-            console.log(response.data);
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
+                // console.log(response.data);
+                return response.data
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            
+            console.log(result)
+            
+            this.props.setBearToken(result.token, result.user)
+            this.props.handleLogging()
+            
+            // console.log(this.state)
 
-          
-        
     }
 
     render() {
@@ -72,4 +80,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login 
+export default Login;

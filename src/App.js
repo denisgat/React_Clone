@@ -7,43 +7,49 @@ const axios = require('axios');
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = ({
+    this.state = {
       route: '/home',
-      isLoggedin: false,
-      users: []
-    })
+      showposts: 'allposts',
+      isLoggedIn: false,
+      user: {},
+      token: ''
+      
+    }
 
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
     this.handleHome = this.handleHome.bind(this);
+    this.setBearToken = this.setBearToken.bind(this);
+    this.handleLogging = this.handleLogging.bind(this);
+    this.handleSubscribedPosts = this.handleSubscribedPosts.bind(this);
+    this.handleAllPosts = this.handleAllPosts.bind(this);
   }
 
 
   async componentDidMount() {
-    let data = {
-      email: 'email@email.com',
-      password: 'password'
-    }
+    // let data = {
+    //   email: 'email@email.com',
+    //   password: 'password'
+    // }
 
-    await axios.get('http://127.0.0.1:8000/api/users', data)
-      .then(response =>  {
-        // handle success
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
+    //  let result = await axios.get('http://127.0.0.1:8000/api/posts')
+    //     .then(response => {
+    //       // handle success
+              // return response.data
+    //     })
+    //     .catch(function (error) {
+    //       // handle error
+    //       console.log(error);
+    //     })
+            // this.setState({
+            //   posts: result.posts
+            // })
 
-      // this.setState({
-      //   users: response
-      // })
+    //     console.log(this.state.users);
+
   }
 
-  handleHome(){
+  handleHome() {
     this.setState({
       route: '/home'
     })
@@ -55,9 +61,70 @@ class App extends React.Component {
     })
   }
 
+  async handleLogging() {
+
+    let logging = ''
+
+    if (this.state.isLoggedIn === false) {
+      logging = true
+    }
+    else {
+      logging = false
+
+      const data = {
+        headers: { Authorization: "Bearer " + this.state.token }
+      }
+
+      await axios.get('http://127.0.0.1:8000/api/logout', data)
+        .then(response => {
+          //handle success
+          console.log('loggedout')
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
+        .then(function () {
+          // always executed
+        });
+    }
+
+
+    this.setState({
+      route: '/home',
+      isLoggedIn: logging
+    })
+
+    console.log('is logged in:' ,this.state.isLoggedIn)
+
+  }
+
   handleRegister() {
     this.setState({
       route: '/register'
+    })
+  }
+
+  handleSubscribedPosts(){
+
+    this.setState({
+      showposts: 'subscribedposts'
+    })
+
+  }
+
+  handleAllPosts(){
+
+      this.setState({
+        showposts: 'allposts'
+      })
+
+  }
+
+  setBearToken(token, user) {
+    this.setState({
+      token: token,
+      user: user
     })
   }
 
@@ -65,8 +132,25 @@ class App extends React.Component {
     if (this.state.route) {
       return (
         <div className="App">
-          <Nav route={this.state.route} isLoggedin={this.state.isLoggedin} handleHome = {this.handleHome} handleLogin={this.handleLogin} handleRegister={this.handleRegister} />
-          <Main route={this.state.route} />
+          <Nav
+            route={this.state.route}
+            isLoggedIn={this.state.isLoggedIn}
+            handleLogging={this.handleLogging}
+            handleHome={this.handleHome}
+            handleLogin={this.handleLogin}
+            handleRegister={this.handleRegister} />
+          <Main
+            user={this.state.user}
+            isLoggedIn={this.state.isLoggedIn}
+            setBearToken={this.setBearToken}
+            route={this.state.route}
+            showposts={this.state.showposts}
+            users={this.state.users}
+            handleHome={this.handleHome}
+            handleLogging={this.handleLogging}
+            handleAllPosts={this.handleAllPosts}
+            handleSubscribedPosts={this.handleSubscribedPosts}
+          />
         </div>
       )
     }

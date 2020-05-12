@@ -13,16 +13,19 @@ function Nav(props) {
                 {/* <a className="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</a> */}
             </form>
             <div className='navbar-right'>
-                {props.route === '/home' ?
+                    {props.isLoggedIn === true ?
+                    <button className='mx-2 btn btn-outline-primary' onClick={props.handleLogging}>Logout</button>                   
+                    :
+                    props.route === '/home' ?
                     <div>
-                        <a className='mx-2 btn btn-outline-primary' onClick={props.handleLogin}>Login</a>
-                        <a className='mx-2 btn btn-primary' onClick={props.handleRegister}>Sign Up</a>
+                        <button className='mx-2 btn btn-outline-primary' onClick={props.handleLogin}>Login</button>
+                        <button className='mx-2 btn btn-primary' onClick={props.handleRegister}>Sign Up</button>
                     </div> 
                     : 
                     props.route === '/login' ?
-                    <a className='mx-2 btn btn-primary' onClick={props.handleRegister}>Sign Up</a>
+                    <button className='mx-2 btn btn-primary' onClick={props.handleRegister}>Sign Up</button>
                     :
-                    <a className='mx-2 btn btn-outline-primary' onClick={props.handleLogin}>Login</a>                   
+                    <button className='mx-2 btn btn-outline-primary' onClick={props.handleLogin}>Login</button>                   
                 }
             </div>
         </nav>
