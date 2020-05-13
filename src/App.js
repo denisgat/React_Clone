@@ -12,7 +12,8 @@ class App extends React.Component {
       showposts: 'allposts',
       isLoggedIn: false,
       user: {},
-      token: ''
+      token: '',
+      posts: []
       
     }
 
@@ -27,25 +28,23 @@ class App extends React.Component {
 
 
   async componentDidMount() {
-    // let data = {
-    //   email: 'email@email.com',
-    //   password: 'password'
-    // }
 
-    //  let result = await axios.get('http://127.0.0.1:8000/api/posts')
-    //     .then(response => {
-    //       // handle success
-              // return response.data
-    //     })
-    //     .catch(function (error) {
-    //       // handle error
-    //       console.log(error);
-    //     })
-            // this.setState({
-            //   posts: result.posts
-            // })
+     let result = await axios.get('http://127.0.0.1:8000/api/allposts')
+        .then(response => {
+          // handle success
+              return response.data
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
 
-    //     console.log(this.state.users);
+        // console.log(result.data)
+
+        this.setState({
+          posts: result.data
+        })
+
 
   }
 
@@ -145,6 +144,7 @@ class App extends React.Component {
             setBearToken={this.setBearToken}
             route={this.state.route}
             showposts={this.state.showposts}
+            posts={this.state.posts}
             users={this.state.users}
             handleHome={this.handleHome}
             handleLogging={this.handleLogging}

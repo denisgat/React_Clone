@@ -10,7 +10,7 @@ function Main(props) {
     if (props.route === '/home') {
         if (props.isLoggedIn) {
             return (
-                <div className='bg-light' style={{ height: '100vh' }}>
+                <div className='' style={{ height: '100vh', backgroundColor: '#f0f0f5' }}>
                     <h1>Welcome {props.user.name}</h1>
                     <br></br>
                     <div className='row'>
@@ -21,8 +21,9 @@ function Main(props) {
                             <button onClick={props.handleSubscribedPosts} className='btn btn-primary btn-lg'>Subscribed Posts</button>
                         </div>
                         <br></br>
+                        <br></br>
                         <div className='container'>
-                            <Posts posts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
+                            <Posts posts={props.posts} showposts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
                         </div>
                     </div>
                 </div>
@@ -30,10 +31,10 @@ function Main(props) {
         }
         else {
             return (
-                <div className='bg-light' style={{ height: '100vh' }}>
+                <div className='' style={{ height: '100vh', backgroundColor: ' #f0f0f5' }}>
                     <br></br>
                     <div className='container'>
-                        <Posts posts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
+                        <Posts posts={props.posts} showposts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
                     </div>
                 </div>
             )
