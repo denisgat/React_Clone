@@ -1,8 +1,8 @@
 import React from 'react';
-import Nav from './Navbar';
-import Main from './Main';
+import Routing from './Routing';
 import './App.css';
 const axios = require('axios');
+
 
 class App extends React.Component {
   constructor(props) {
@@ -13,8 +13,9 @@ class App extends React.Component {
       isLoggedIn: false,
       user: {},
       token: '',
-      posts: []
-      
+      posts: [],
+      subreddits: []
+
     }
 
     this.handleLogin = this.handleLogin.bind(this);
@@ -29,21 +30,32 @@ class App extends React.Component {
 
   async componentDidMount() {
 
-     let result = await axios.get('http://127.0.0.1:8000/api/allposts')
-        .then(response => {
-          // handle success
-              return response.data
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        })
+    let postsCall = await axios.get('http://127.0.0.1:8000/api/allposts')
+      .then(response => {
+        // handle success
+        return response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
 
-        // console.log(result.data)
+    let subredditCall= await axios.get('http://127.0.0.1:8000/api/subreddits')
+    .then(response => {
+          return response.data
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
 
-        this.setState({
-          posts: result.data
-        })
+
+    this.setState({
+      posts: postsCall.data,
+      subreddits: subredditCall
+    })
+
+    // console.log(this.state.posts,this.state.subreddits)
 
 
   }
@@ -71,10 +83,19 @@ class App extends React.Component {
       logging = false
 
       const data = {
-        headers: { Authorization: "Bearer " + this.state.token }
+        
       }
 
-      await axios.get('http://127.0.0.1:8000/api/logout', data)
+      const config = {
+                headers : {
+                    'content-type' : 'multipart/form-data',
+                    'Authorization' : 'Bearer '+ this.state.token
+                }
+            }
+
+
+
+      await axios.post('http://127.0.0.1:8000/api/logout', data, config)
         .then(response => {
           //handle success
           console.log('loggedout')
@@ -83,9 +104,6 @@ class App extends React.Component {
           // handle error
           console.log(error);
         })
-        .then(function () {
-          // always executed
-        });
     }
 
 
@@ -94,7 +112,7 @@ class App extends React.Component {
       isLoggedIn: logging
     })
 
-    console.log('is logged in:' ,this.state.isLoggedIn)
+    console.log('is logged in:', this.state.isLoggedIn)
 
   }
 
@@ -104,7 +122,7 @@ class App extends React.Component {
     })
   }
 
-  handleSubscribedPosts(){
+  handleSubscribedPosts() {
 
     this.setState({
       showposts: 'subscribedposts'
@@ -112,11 +130,11 @@ class App extends React.Component {
 
   }
 
-  handleAllPosts(){
+  handleAllPosts() {
 
-      this.setState({
-        showposts: 'allposts'
-      })
+    this.setState({
+      showposts: 'allposts'
+    })
 
   }
 
@@ -128,30 +146,32 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.route) {
+    // console.log(this.state)
+    if (this.state.subreddits.length > 0) {
       return (
         <div className="App">
-          <Nav
-            route={this.state.route}
-            isLoggedIn={this.state.isLoggedIn}
-            handleLogging={this.handleLogging}
-            handleHome={this.handleHome}
-            handleLogin={this.handleLogin}
-            handleRegister={this.handleRegister} />
-          <Main
-            user={this.state.user}
-            isLoggedIn={this.state.isLoggedIn}
-            setBearToken={this.setBearToken}
-            route={this.state.route}
-            showposts={this.state.showposts}
-            posts={this.state.posts}
-            users={this.state.users}
-            handleHome={this.handleHome}
-            handleLogging={this.handleLogging}
-            handleAllPosts={this.handleAllPosts}
-            handleSubscribedPosts={this.handleSubscribedPosts}
-          />
+            <Routing
+              // parentstate = {this.state}
+              token = {this.state.token}
+              user={this.state.user}
+              isLoggedIn={this.state.isLoggedIn}
+              setBearToken={this.setBearToken}
+              route={this.state.route}
+              subreddits={this.state.subreddits}
+              showposts={this.state.showposts}
+              posts={this.state.posts}
+              users={this.state.users}
+              handleHome={this.handleHome}
+              handleLogging={this.handleLogging}
+              handleAllPosts={this.handleAllPosts}
+              handleSubscribedPosts={this.handleSubscribedPosts}
+            />
         </div>
+      )
+    }
+    else{
+      return(
+      <h6>In progress</h6>
       )
     }
 

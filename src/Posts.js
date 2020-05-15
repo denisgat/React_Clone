@@ -1,44 +1,32 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCommentAlt, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
-
-// function Postss(props){
-//     props.posts.map((item,index) => {
-//             return(
-//                 <div key={index} className='container bg-dark text-white'>
-//                     <h1>{item.subreddit.subredditname}</h1>
-//                     <br></br>
-//                     <h1>{item.user.name}</h1>
-//                     <h1>{item.title}</h1>
-//                     <br></br>
-//                     <h1>{item.body}</h1>
-//                 </div>
-//             )
-//         })
-// }
 
 function Posts(props) {
-    console.log(props.posts)
 
     const postss = props.posts.map((item, index) => {
         return (
             <div key={index} className='mt-3 border-dark rounded container bg-white text-dark'>
-                <div className='row'>
+                <div className='row ' style={{ minheight: '35vh' }} >
                     <div className="bg-light col-1 pt-3">
-                        <p>up</p>
+                        <FontAwesomeIcon icon={faArrowUp} />
                         <br></br>
-                        <p>down</p>
+                        <p className='mb-1'>49k</p>
+                        <FontAwesomeIcon className='mb-3' icon={faArrowDown} />
+                        <br></br>
                     </div>
                     <div className='col-10'>
                         <div className='row mt-1'>
-                            <h6 className='ml-2'>{item.subreddit.subredditname}</h6>
-                            <h6 className='ml-5 text-muted'>posted by {item.user.name}</h6>
+                            <Link to={'/subreddit' + '/' + item.subreddit.subredditname}><h6 className='ml-2'>r/{item.subreddit.subredditname}</h6></Link>
+                            <h6 className='ml-5 text-muted'>posted by <Link to={'/user' + '/' + item.user.id}>u/{item.user.name}</Link></h6>
                         </div>
                         <div className='row'>
-                            <h6>{item.title}</h6>
+                            <Link to={'/post' + '/' + item.id}><h6>{item.title}</h6></Link>
                         </div>
-                        <div className='row text-muted'>
-                            <span>Comments</span>
-                            <span>Share</span>
+                        <div className='row text-muted position-bottom'>
+                            <Link to={'/post' + '/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt} /><span className='ml-1'>Comments</span></Link>
                         </div>
                     </div>
                 </div>
@@ -46,6 +34,7 @@ function Posts(props) {
 
         )
     })
+
 
     if (props.isLoggedIn) {
         if (props.showposts === 'allposts') {
@@ -63,6 +52,7 @@ function Posts(props) {
         }
     }
     else {
+        console.log(props.posts)
         return (
             <div>
                 {postss}

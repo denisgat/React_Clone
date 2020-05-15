@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 const axios = require('axios');
 
 class Register extends React.Component {
@@ -77,11 +78,11 @@ class Register extends React.Component {
                     console.log(error);
                 })
 
-                console.log(result)
+            console.log(result)
 
             this.props.setBearToken(result.token, result.user)
             this.props.handleLogging()
-            
+
             console.log(this.state)
         }
 
@@ -89,28 +90,31 @@ class Register extends React.Component {
 
     render() {
         return (
-            <div className='container px-5' >
-                <h1 >Register</h1>
-                <form onSubmit={this.handleSubmit} className='mt-5'>
-                    <div className="form-group">
-                        <label>UserName</label>
-                        <input onChange={this.handleUserChange} value={this.state.username} type="text" className="form-control" id="exampleInputUserName" aria-describedby="emailHelp" placeholder="Enter UserName" />
-                    </div>
-                    <div className="form-group">
-                        <label>Email address</label>
-                        <input onChange={this.handleEmailChange} value={this.state.email} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
-                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input onChange={this.handlePasswordChange} value={this.state.password} type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
-                    </div>
-                    <div className="form-group">
-                        <label>Confirm Password</label>
-                        <input onChange={this.handleConfPasswordChange} value={this.state.confpassword} type="password" className="form-control" id="exampleInputPassword2" placeholder="Password" />
-                    </div>
-                    <input className='btn btn-lg btn-primary' type="submit" value="Register" />
-                </form>
+            <div className='' style={{ height: '100vh', backgroundColor: '#f0f0f5' }}>
+
+                <div className='container px-5' >
+                    <h1 >Register</h1>
+                    <form onSubmit={this.handleSubmit} className='mt-5'>
+                        <div className="form-group">
+                            <label>UserName</label>
+                            <input onChange={this.handleUserChange} value={this.state.username} type="text" className="form-control" id="exampleInputUserName" aria-describedby="emailHelp" placeholder="Enter UserName" />
+                        </div>
+                        <div className="form-group">
+                            <label>Email address</label>
+                            <input onChange={this.handleEmailChange} value={this.state.email} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
+                            <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input onChange={this.handlePasswordChange} value={this.state.password} type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
+                        </div>
+                        <div className="form-group">
+                            <label>Confirm Password</label>
+                            <input onChange={this.handleConfPasswordChange} value={this.state.confpassword} type="password" className="form-control" id="exampleInputPassword2" placeholder="Password" />
+                        </div>
+                        <Link to='/' ><input onClick={this.handleSubmit} className='btn btn-lg btn-primary' type="submit" value="SignUp" /></Link>
+                    </form>
+                </div>
             </div>
         )
     }
