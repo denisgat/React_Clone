@@ -5,18 +5,13 @@ import Nav from './Navbar';
 import Subreddit from './Subreddit';
 import User from './User';
 import Home from './Home';
-import Create from './CreateSubreddit';
+import CreateSub from './CreateSubreddit';
+import Profile from './Profile';
+import CreatePost from './CreatePost';
+import SinglePost from './SinglePost';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 
 
-
-function Posted() {
-    return (
-        <h1>In Post</h1>
-    )
-}
 
 // history.push("/viewStream");
 
@@ -27,6 +22,8 @@ function Routing(props) {
         <BrowserRouter>
             <Nav
                 route={props.route}
+                posts={props.posts}
+                subreddits = {props.subreddits}
                 isLoggedIn={props.isLoggedIn}
                 handleLogging={props.handleLogging}
                 handleHome={props.handleHome}
@@ -62,14 +59,35 @@ function Routing(props) {
                         setBearToken={props.setBearToken}
                     />
                 </Route>
-                <Route path='/posted'>
-                    <Posted />
+                <Route exact path='/post/create'>
+                    <CreatePost
+                        isLoggedIn={props.isLoggedIn}
+                        handleLogging={props.handleLogging}
+                        setBearToken={props.setBearToken}
+                        user={props.user}
+                        token = {props.token}
+                        subreddits={props.subreddits}
+                    />
+
+                </Route>
+                <Route path='/post/:postId'>
+                    <SinglePost
+                        posts = {props.posts}
+                    />
                 </Route>
                 <Route path='/user'>
-                    <User />
+                    <User 
+                        posts={props.posts}
+                    />
                 </Route>
+                <Route path='/profile'>
+                    <Profile 
+                        user={props.user}
+                    />
+                </Route>
+
                 <Route path='/subreddit/create'>
-                    <Create
+                    <CreateSub
                         isLoggedIn={props.isLoggedIn}
                         handleLogging={props.handleLogging}
                         setBearToken={props.setBearToken}

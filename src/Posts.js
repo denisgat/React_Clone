@@ -9,7 +9,7 @@ function Posts(props) {
     const postss = props.posts.map((item, index) => {
         return (
             <div key={index} className='mt-3 border-dark rounded container bg-white text-dark'>
-                <div className='row ' style={{ minheight: '35vh' }} >
+                <div className='row ' style={{ minHeight: '20vh' }} >
                     <div className="bg-light col-1 pt-3">
                         <FontAwesomeIcon icon={faArrowUp} />
                         <br></br>
@@ -19,14 +19,15 @@ function Posts(props) {
                     </div>
                     <div className='col-10'>
                         <div className='row mt-1'>
-                            <Link to={'/subreddit' + '/' + item.subreddit.subredditname}><h6 className='ml-2'>r/{item.subreddit.subredditname}</h6></Link>
-                            <h6 className='ml-5 text-muted'>posted by <Link to={'/user' + '/' + item.user.id}>u/{item.user.name}</Link></h6>
+                            <Link to={'/subreddit/' + item.subreddit.subredditname}><h5 className='ml-2'>r/{item.subreddit.subredditname}</h5></Link>
+                            <h6 className='ml-5 text-muted'>posted by <Link to={'/user/' + item.user.id}>u/{item.user.name}</Link></h6>
                         </div>
-                        <div className='row'>
-                            <Link to={'/post' + '/' + item.id}><h6>{item.title}</h6></Link>
+                        <div className='pl-2 py-3 row'>
+                            <Link to={'/post/' + item.id}><h5>{item.title}</h5></Link>
                         </div>
-                        <div className='row text-muted position-bottom'>
-                            <Link to={'/post' + '/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt} /><span className='ml-1'>Comments</span></Link>
+                        <hr className='pb-0'></hr>
+                        <div className='pl-3 pt-0 row text-muted position-bottom'>
+                            <Link to={'/post/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt} /><span className='ml-1'>Comments</span></Link>
                         </div>
                     </div>
                 </div>
@@ -52,7 +53,7 @@ function Posts(props) {
         }
     }
     else {
-        console.log(props.posts)
+        // console.log(props.posts)
         return (
             <div>
                 {postss}

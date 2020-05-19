@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 const axios = require('axios');
 
 
@@ -41,21 +42,25 @@ class Login extends React.Component {
         }
 
 
-        let result = await axios.post('http://127.0.0.1:8000/api/login', data)
+       await axios.post('http://127.0.0.1:8000/api/login', data)
             .then(response => {
-                // console.log(response.data);
-                return response.data
-                // history.push('/')
+                console.log(response);
+                let result = response.data 
+                this.props.setBearToken(result.token, result.user)
+                this.props.handleLogging()
+                
+                window.localStorage.setItem('token', JSON.stringify(result.token))
+                window.localStorage.setItem('user', JSON.stringify(result.user))
+                window.localStorage.setItem('isLoggedIn', JSON.stringify(true))
+                // return response.data
+                this.props.history.push('/')
             })
             .catch(function (error) {
                 console.log(error);
             })
-
-        console.log(result)
-
-        this.props.setBearToken(result.token, result.user)
-        this.props.handleLogging()
-
+            
+            // console.log(result)
+        
         // console.log(this.state)
 
     }
@@ -83,4 +88,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);

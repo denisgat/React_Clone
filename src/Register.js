@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 const axios = require('axios');
 
 class Register extends React.Component {
@@ -60,30 +60,48 @@ class Register extends React.Component {
         if (this.state.username === '' || this.state.email === '' || this.state.password === '' || this.state.confpassword === '') {
             alert('A field has been left empty, please fill out all fields')
         }
-        if (this.state.password !== this.state.confpassword) {
+
+        else if (this.state.password !== this.state.confpassword) {
             alert('Confirmation Password does not match')
             await this.setState({
                 confpassword: '',
-                password: ''
             })
         }
 
         else {
-            let result = await axios.post('http://127.0.0.1:8000/api/register', data)
-                .then(function (response) {
-                    console.log(response.data);
-                    return response.data
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
+            await axios.post('http://127.0.0.1:8000/api/register', data)
+            .then(response => {
+                console.log(response);
+                let result = response.data 
+                this.props.setBearToken(result.token, result.user)
+                this.props.handleLogging()
+                
+                window.localStorage.setItem('token', JSON.stringify(result.token))
+                window.localStorage.setItem('user', JSON.stringify(result.user))
+                window.localStorage.setItem('isLoggedIn', JSON.stringify(true))
+                // return response.data
+                this.props.history.push('/')
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
 
-            console.log(result)
+            // let result = await axios.post('http://127.0.0.1:8000/api/register', data)
+            //     .then(function (response) {
+            //         console.log(response.data);
+            //         return response.data
 
-            this.props.setBearToken(result.token, result.user)
-            this.props.handleLogging()
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     })
 
-            console.log(this.state)
+            // console.log(result)
+
+            // this.props.setBearToken(result.token, result.user)
+            // this.props.handleLogging()
+
+            // console.log(this.state)
         }
 
     }
@@ -120,4 +138,4 @@ class Register extends React.Component {
     }
 }
 
-export default Register
+export default withRouter(Register);

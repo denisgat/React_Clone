@@ -1,8 +1,9 @@
 import React from 'react';
 import Login from './Login';
+import {withRouter} from 'react-router-dom';
 const axios = require('axios');
 
-class Create extends React.Component {
+class CreateSub extends React.Component {
     constructor(props) {
         super(props)
 
@@ -22,8 +23,10 @@ class Create extends React.Component {
 
 
     handleSubName(event) {
+        const newsubname = event.target.value.split(" ").join("")
+        // console.log(newsubname)
         this.setState({
-            subname: event.target.value
+            subname: newsubname
         });
     }
 
@@ -58,17 +61,16 @@ class Create extends React.Component {
         }
 
 
-        let result = await axios.post('http://127.0.0.1:8000/api/subreddits/create', data, config)
+         await axios.post('http://127.0.0.1:8000/api/subreddits/create', data, config)
             .then(response => {
-                // console.log(response.data);
-                return response.data
-                // history.push('/')
+                // console.log(response.data)
+                this.props.history.push('/subreddits/' + this.state.subname)
             })
             .catch(function (error) {
                 console.log(error);
             })
 
-        console.log(result)
+        // console.log(result)
 
         // console.log(this.state)
 
@@ -111,4 +113,4 @@ class Create extends React.Component {
     }
 }
 
-export default Create
+export default withRouter(CreateSub)
