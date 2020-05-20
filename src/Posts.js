@@ -6,14 +6,17 @@ import { faCommentAlt, faArrowUp, faArrowDown } from '@fortawesome/free-solid-sv
 
 function Posts(props) {
 
+    
+
     const postss = props.posts.map((item, index) => {
+        let commentCount = item.comment.length
         return (
-            <div key={index} className='mt-3 border-dark rounded container bg-white text-dark'>
+            <div key={index} className='mt-3 border-dark rounded container bg-white text-dark pb-2'>
                 <div className='row ' style={{ minHeight: '20vh' }} >
                     <div className="bg-light col-1 pt-3">
                         <FontAwesomeIcon icon={faArrowUp} />
                         <br></br>
-                        <p className='mb-1'>49k</p>
+                        <p className='mb-1'>{item.likes}</p>
                         <FontAwesomeIcon className='mb-3' icon={faArrowDown} />
                         <br></br>
                     </div>
@@ -27,7 +30,7 @@ function Posts(props) {
                         </div>
                         <hr className='pb-0'></hr>
                         <div className='pl-3 pt-0 row text-muted position-bottom'>
-                            <Link to={'/post/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt} /><span className='ml-1'>Comments</span></Link>
+                            <Link to={'/post/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt} /><span className='ml-1'>{commentCount} Comment(s)</span></Link>
                         </div>
                     </div>
                 </div>

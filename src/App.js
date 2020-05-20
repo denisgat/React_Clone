@@ -17,8 +17,8 @@ class App extends React.Component {
       user: {},
       token: '',
       posts: [],
-      subreddits: []
-
+      subreddits: [],
+      users: []
     }
 
     this.handleLogin = this.handleLogin.bind(this);
@@ -28,6 +28,8 @@ class App extends React.Component {
     this.handleLogging = this.handleLogging.bind(this);
     this.handleSubscribedPosts = this.handleSubscribedPosts.bind(this);
     this.handleAllPosts = this.handleAllPosts.bind(this);
+    this.setPosts = this.setPosts.bind(this);
+    this.setSubreddits = this.setSubreddits.bind(this);
   }
 
 
@@ -45,19 +47,29 @@ class App extends React.Component {
         console.log(error);
       })
 
-    let subredditCall = await axios.get('http://127.0.0.1:8000/api/subreddits')
+    let subredditsCall = await axios.get('http://127.0.0.1:8000/api/allsubreddits')
       .then(response => {
         return response.data
       })
       .catch(function (error) {
         // handle error
-        console.log(error); 
+        console.log(error);
+      })
+
+    let usersCall = await axios.get('http://127.0.0.1:8000/api/allusers')
+      .then(response => {
+        return response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
       })
 
 
     this.setState({
       posts: postsCall.data,
-      subreddits: subredditCall
+      subreddits: subredditsCall,
+      users: usersCall
     })
 
     if (window.localStorage.token) {
@@ -68,12 +80,22 @@ class App extends React.Component {
       })
     }
 
-    console.log(this.state.posts,this.state.subreddits)
+    console.log(this.state.posts, this.state.subreddits, this.state.users)
   }
 
-  componentDidUpdate() {
+  setSubreddits(newsubreddits) {
+    this.setState({
+      subreddits: newsubreddits,
+    })
 
   }
+
+  setPosts(newposts) {
+    this.setState({
+      posts: newposts,
+    })
+  }
+
 
   handleHome() {
     this.setState({
@@ -161,7 +183,7 @@ class App extends React.Component {
   }
 
   render() {
-    // console.log(this.state)
+    // console.log(this.state.subreddits)
     if (this.state.subreddits.length > 0) {
       return (
         <div className="App">
@@ -180,10 +202,13 @@ class App extends React.Component {
             handleLogging={this.handleLogging}
             handleAllPosts={this.handleAllPosts}
             handleSubscribedPosts={this.handleSubscribedPosts}
+            setPosts={this.setPosts}
+            setSubreddits={this.setSubreddits}
           />
         </div>
       )
     }
+
     else {
       return (
         <div className=' container text-center fa-3x'>

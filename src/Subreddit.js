@@ -14,7 +14,7 @@ class Subreddit extends React.Component {
         this.state = {
             posts: [],
             subs: this.props.subreddits,
-            subinfo: [],
+            subinfo: {},
             subname: window.location.pathname.split('/')[2]
         }
 
@@ -23,24 +23,28 @@ class Subreddit extends React.Component {
     }
 
     async componentDidMount() {
-        const sub_id = this.props.subreddits.filter(item => (item.subredditname === this.state.subname))
+        // console.log(this.state.subname, this.props.subreddits)
 
-        let subredditIdCall = await axios.get('http://127.0.0.1:8000/api/subreddits/' + sub_id[0].id)
+
+        let sub = this.props.subreddits.find(item => (item.subredditname === this.state.subname))
+        // console.log(sub)
+
+
+         await axios.get('http://127.0.0.1:8000/api/subreddits/' + sub.id)
             .then(response => {
+                const subinfo = this.props.subreddits.find(item => (item.subredditname === this.state.subname))
 
-                return response.data.data.posts
+                this.setState({
+                    posts: response.data.data.posts,
+                    subinfo: subinfo
+                })
+
             })
             .catch(function (error) {
                 // handle error
                 console.log(error);
             })
 
-        const subinfo = this.props.subreddits.filter(item => (item.subredditname === this.state.subname))
-
-        this.setState({
-            posts: subredditIdCall,
-            subinfo: subinfo
-        })
         // const subposts = this.props.posts.filter(item => (item.subreddit.subredditname == this.state.subname))
 
         // console.log(subposts)
@@ -49,52 +53,57 @@ class Subreddit extends React.Component {
     }
 
     render() {
-        if (this.state.posts.length > 0 && this.state.subinfo.length > 0) {
+        // console.log(this.state, this.props)
+        if (this.state.posts.length > 0 && this.state.subinfo && this.props.subreddits.length > 0) {
             // console.log(this.props.posts)
-            const posts = this.props.posts.filter(item => item.subreddit.subredditname === this.state.subname)
-                .map((item, index) => {
-                    return (
-                        <div key={index} className='mt-3 border-dark rounded container bg-white text-dark'>
-                            <div className='row ' style={{ minHeight: '20vh' }} >
-                                <div className="bg-light col-1 pt-3">
-                                    <FontAwesomeIcon icon={faArrowUp} />
-                                    <br></br>
-                                    <p className='mb-1'>49k</p>
-                                    <FontAwesomeIcon className='mb-3' icon={faArrowDown} />
-                                    <br></br>
+            const posts = this.props.posts.filter(item => item.subreddit.subredditname === this.state.subname).map((item, index) => {
+                let commentCount = item.comment.length
+                return (
+                    <div key={index} className='mt-3 border-dark rounded container bg-white text-dark pb-2'>
+                        <div className='row ' style={{ minHeight: '20vh' }} >
+                            <div className="bg-light col-1 pt-3">
+                                <FontAwesomeIcon icon={faArrowUp} />
+                                <br></br>
+                                <p className='mb-1'>{item.likes}</p>
+                                <FontAwesomeIcon className='mb-3' icon={faArrowDown} />
+                                <br></br>
+                            </div>
+                            <div className='col-10'>
+                                <div className='row mt-1'>
+                                    <h5 className='ml-2'>r/{item.subreddit.subredditname}</h5>
+                                    <h6 className='ml-5 text-muted'>posted by <Link to={'/user/' + item.user.id}>u/{item.user.name}</Link></h6>
                                 </div>
-                                <div className='col-10'>
-                                    <div className='row mt-1'>
-                                        <Link to={'/subreddit/' + item.subreddit.subredditname}><h5 className='ml-2'>r/{item.subreddit.subredditname}</h5></Link>
-                                        <h6 className='ml-5 text-muted'>posted by <Link to={'/user/' + item.user.id}>u/{item.user.name}</Link></h6>
-                                    </div>
-                                    <div className='pl-3 py-3 row'>
-                                        <Link to={'/post/' + item.id}><h5>{item.title}</h5></Link>
-                                    </div>
-                                    <hr className='pb-0'></hr>
-                                    <div className='pl-3 pt-0 row text-muted position-bottom'>
-                                        <Link to={'/post/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt} /><span className='ml-1'>Comments</span></Link>
-                                    </div>
+                                <div className='pl-3 py-3 row'>
+                                    <Link to={'/post/' + item.id}><h5><strong>{item.title}</strong></h5></Link>
+                                </div>
+                                <hr className='pb-0'></hr>
+                                <div className='pl-3 pt-0 row text-muted position-bottom'>
+                                    <Link to={'/post/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt} /><span className='ml-1'>{commentCount} Comment(s)</span></Link>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                    )
-                })
+                )
+            })
 
             return (
-                <div className='' style={{ height: '100vh', backgroundColor: ' #e1e1ea' }}>
-                    <div className='container mx-auto pt-4 row'>
-                        <div className='col-12'>
-                            <Link to='/post/create' className='btn btn-primary'>Create a post</Link>
-                        </div>
-                    </div>
+                <div className='' style={{ minHeight: '100vh', height: '100%', backgroundColor: ' #e1e1ea' }}>
                     <div className='container mx-auto pt-4 row'>
                         <div className='col-12 mx-auto'>
                             <h1>{this.state.subname} Subreddit</h1>
-                            <h5 className='mx-auto'>Sub Description: {this.state.subinfo[0].subredditdesc}</h5>
+                            <h5 className='mx-auto'>Sub Description: {this.state.subinfo.subredditdesc}</h5>
                         </div>
                     </div>
+                    <div className='container mx-auto pt-4 row'>
+                        <div className='col-6'>
+                            <Link to='/post/create' className='btn btn-primary'>Create a post</Link>
+                        </div>
+                        <div className='col-6'>
+                            <button className='btn btn-success'>Subscribe</button>
+                        </div>
+                    </div>
+
                     {posts}
 
                 </div>
@@ -115,38 +124,6 @@ class Subreddit extends React.Component {
 
     }
 }
-
-
-// function Postsss(props){
-//     const posts = props.posts.map((item, index) => {
-//         return (
-//             <div key={index} className='mt-3 border-dark rounded container bg-white text-dark'>
-//                 <div className='row ' style={{minheight: '35vh'}}>
-//                     <div className="bg-light col-1 pt-3">
-//                         <FontAwesomeIcon icon={faArrowUp}/>
-//                         <br></br>
-//                         <p className='mb-1'>49k</p>
-//                         <FontAwesomeIcon className='mb-3' icon={faArrowDown}/>
-//                         <br></br>
-//                     </div>
-//                     <div className='col-10'>
-//                         <div className='row mt-1'>
-//                             <Link to={'/subreddit/' + item.subreddit.subredditname}><h6 className='ml-2'>r/{item.subreddit.subredditname}</h6></Link>
-//                             <h6 className='ml-5 text-muted'>posted by <Link to={'/user/' + item.user.id}>u/{item.user.name}</Link></h6>
-//                         </div>
-//                         <div className='row'>
-//                             <Link to={'/post/' + item.id}><h6>{item.title}</h6></Link>
-//                         </div>
-//                         <div className='row text-muted position-bottom'>
-//                             <Link to={'/post/' + item.id}><FontAwesomeIcon className='ml-1' icon={faCommentAlt}/><span className='ml-1'>Comments</span></Link>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-
-//         )
-//     })
-// }
 
 
 export default Subreddit

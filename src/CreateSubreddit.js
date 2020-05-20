@@ -45,7 +45,7 @@ class CreateSub extends React.Component {
             token: this.props.token
         })
 
-        console.log(this.state)
+        // console.log(this.state)
 
         const data = {
             subname: this.state.subname,
@@ -64,7 +64,9 @@ class CreateSub extends React.Component {
          await axios.post('http://127.0.0.1:8000/api/subreddits/create', data, config)
             .then(response => {
                 // console.log(response.data)
-                this.props.history.push('/subreddits/' + this.state.subname)
+
+                this.props.setSubreddits(response.data)
+                this.props.history.push('/subreddit/' + this.state.subname)
             })
             .catch(function (error) {
                 console.log(error);

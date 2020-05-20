@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from './Login';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 const axios = require('axios');
 
 class CreatePost extends React.Component {
@@ -8,12 +8,12 @@ class CreatePost extends React.Component {
         super(props)
 
         this.state = {
-            subreddit_name: '',
+            subreddit: {subredditname: ''},
             user_id: '',
             title: '',
             body: '',
             img: '',
-            token: ''
+            token: '',
 
         }
 
@@ -26,10 +26,15 @@ class CreatePost extends React.Component {
     }
 
     handleSub(event) {
-        var sub = event.target.options[event.target.selectedIndex].text
-        // console.log(sub)
+        // var subid = parseInt(event.target.value)
+    
+        var subname = event.target.options[event.target.selectedIndex].text
+        const subreddit = this.props.subreddits.find(item => item.subredditname===subname)
+        // console.log(subname, subreddit)
+        // console.log(this.props.subreddits, subreddit, subid)
+   
         this.setState({
-            subreddit_name: sub,
+            subreddit: subreddit,
         })
     }
 
@@ -46,7 +51,7 @@ class CreatePost extends React.Component {
         })
     }
 
-    // handleImg(event){
+    // handleImg(event) {
     //     this.setState({
     //         img: event.target.value,
     //     })
@@ -55,40 +60,38 @@ class CreatePost extends React.Component {
     async handleSubmit(event) {
         event.preventDefault();
         // console.log(this.props.subreddits.filter(item => item.subredditname === this.state.subreddit_name)[0].id)
-        
-        const sub_id = this.props.subreddits.filter(item => item.subredditname === this.state.subreddit_name)[0].id
+
+    
 
         // console.log(sub_id)
-        
-        await this.setState({
-            user_id: this.props.user.id,
-            token: this.props.token
-        })
-        
+
+
         // console.log(this.state)
-        
+
 
         const data = {
             title: this.state.title,
             body: this.state.body,
-            user_id: this.state.user_id,
-            subreddit_id: sub_id
+            user_id: this.props.user.id,
+            subreddit_id: this.state.subreddit.id
+            // img: this.state.img
         }
         // console.log(data)
 
         const config = {
             headers: {
                 'content-type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + this.state.token
+                'Authorization': 'Bearer ' + this.props.token
             }
         }
 
 
         await axios.post('http://127.0.0.1:8000/api/post/create', data, config)
             .then(response => {
-                // console.log(response.data);
+                // console.log(response.data.data);
                 // return response.data
-                this.props.history.push('/subreddit/' + this.state.subreddit_name)
+                this.props.setPosts(response.data.data);
+                this.props.history.push('/subreddit/' + this.state.subreddit.subredditname)
             })
             .catch(function (error) {
                 console.log(error);
@@ -106,7 +109,7 @@ class CreatePost extends React.Component {
         // console.log(this.props)
         const subreddits = this.props.subreddits.map((item, index) => {
             return (
-                <option key={index}>{item.subredditname}</option>
+                <option key={index} value={item.subredditname}>{item.subredditname}</option>
             )
         })
 
@@ -117,7 +120,8 @@ class CreatePost extends React.Component {
                         <h1 className='p-3'>Creating Post</h1>
                         <form onSubmit={this.handleSubmit} className='mt-5'>
                             <label>SubReddit</label>
-                            <select onChange={this.handleSub} value={this.state.subreddit_name} className="form-control" id="exampleFormControlSelect1">
+                            <select onChange={this.handleSub} value={this.state.subreddit.subredditname} className="form-control" id="exampleFormControlSelect1">
+                                <option style={{display: 'none'}}>Select a subreddit </option> 
                                 {subreddits}
                             </select>
                             <div className="form-group">
@@ -128,6 +132,12 @@ class CreatePost extends React.Component {
                                 <label>Post Body</label>
                                 <textarea rows='5' onChange={this.handleBody} value={this.state.body} type="text" className="form-control" id="exampleInputDesc" aria-describedby="emailHelp2" placeholder="Post Body" />
                             </div>
+                            <div action="upload.php" method="post">
+                                <label>Choose an image(can be left empty)</label>
+                                <br></br>
+                                <input type="file" name="fileToUpload" id="fileToUpload"></input>
+                            </div>
+                            <br></br>
                             <input className='btn btn-lg btn-primary' type="submit" value="Create" />
                         </form>
                     </div>

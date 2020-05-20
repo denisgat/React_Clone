@@ -17,7 +17,6 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 
 function Routing(props) {
-    // console.log(props.subreddits)
     return (
         <BrowserRouter>
             <Nav
@@ -67,17 +66,25 @@ function Routing(props) {
                         user={props.user}
                         token = {props.token}
                         subreddits={props.subreddits}
+                        setPosts = {props.setPosts}
                     />
 
                 </Route>
                 <Route path='/post/:postId'>
                     <SinglePost
                         posts = {props.posts}
+                        users = {props.users}
+                        user={props.user}
+                        isLoggedIn={props.isLoggedIn}
+                        token = {props.token}
+                        setPosts={props.setPosts}
                     />
                 </Route>
                 <Route path='/user'>
                     <User 
                         posts={props.posts}
+                        users={props.users}
+                        
                     />
                 </Route>
                 <Route path='/profile'>
@@ -93,6 +100,7 @@ function Routing(props) {
                         setBearToken={props.setBearToken}
                         user={props.user}
                         token = {props.token}
+                        setSubreddits = {props.setSubreddits}
                     />
                 </Route>
                 <Route exact path='/subreddit/:pageName'>
