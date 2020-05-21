@@ -44,6 +44,7 @@ function Routing(props) {
                         handleAllPosts={props.handleAllPosts}
                         handleSubscribedPosts={props.handleSubscribedPosts}
                         subreddits={props.subreddits}
+                        timeChange={props.timeChange}
                     />
                 </Route>
                 <Route path='/login'>
@@ -78,18 +79,20 @@ function Routing(props) {
                         isLoggedIn={props.isLoggedIn}
                         token = {props.token}
                         setPosts={props.setPosts}
+                        timeChange={props.timeChange}
                     />
                 </Route>
                 <Route path='/user'>
                     <User 
                         posts={props.posts}
                         users={props.users}
-                        
+                        timeChange={props.timeChange}
                     />
                 </Route>
                 <Route path='/profile'>
                     <Profile 
                         user={props.user}
+                        timeChange={props.timeChange}
                     />
                 </Route>
 
@@ -107,6 +110,7 @@ function Routing(props) {
                     <Subreddit
                         subreddits={props.subreddits}
                         posts={props.posts}
+                        timeChange={props.timeChange}
                     />
                 </Route>
             </Switch>

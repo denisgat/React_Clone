@@ -30,6 +30,7 @@ class App extends React.Component {
     this.handleAllPosts = this.handleAllPosts.bind(this);
     this.setPosts = this.setPosts.bind(this);
     this.setSubreddits = this.setSubreddits.bind(this);
+    this.timeChange = this.timeChange.bind(this);
   }
 
 
@@ -182,8 +183,36 @@ class App extends React.Component {
     })
   }
 
+  timeChange(createdTime){
+    let currentTime = new Date().getTime();
+    let difference = currentTime - createdTime;
+    let days = Math.floor(difference / 86400000);
+    let hours = Math.floor(difference / 3600000);     //milliseconds per hour
+    let minutes = Math.floor(difference / 60000);      //milliseconds per minute   
+    if (minutes < 1) {
+      return 'Just now';
+    }
+    if (minutes === 1) {
+      return '1 minute ago';
+    }
+    if (minutes < 60) {
+      return minutes + ' minutes ago'
+    }
+    if (hours === 1) {
+      return hours + ' hour ago'
+    }
+    if (hours < 24) {
+      return hours + ' hours ago'
+    }
+    if (days === 1) {
+      return days + ' day ago'      }
+    if (days > 1) {
+      return days + ' days ago'      }
+  }
+
   render() {
     // console.log(this.state.subreddits)
+
     if (this.state.subreddits.length > 0) {
       return (
         <div className="App">
@@ -204,6 +233,7 @@ class App extends React.Component {
             handleSubscribedPosts={this.handleSubscribedPosts}
             setPosts={this.setPosts}
             setSubreddits={this.setSubreddits}
+            timeChange={this.timeChange}
           />
         </div>
       )

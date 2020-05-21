@@ -27,7 +27,7 @@ function Home(props) {
                 </div>
                 <br></br>
                 <div className='container'>
-                    <Posts posts={props.posts} showposts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
+                    <Posts timeChange={props.timeChange} posts={props.posts} showposts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
                 </div>
             </div>
         )
@@ -37,8 +37,7 @@ function Home(props) {
             <div className='' style={{ minHeight: '100vh', height: '100%', backgroundColor: ' #e1e1ea' }}>
                 <br></br>
                 <div className='container'>
-                    <SubDropDown subreddits={props.subreddits} posts={props.posts} />
-                    <Posts posts={props.posts} showposts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
+                    <Posts timeChange={props.timeChange} posts={props.posts} showposts={props.showposts} route={props.route} isLoggedIn={props.isLoggedIn} />
                 </div>
             </div>
         )

@@ -70,11 +70,13 @@ class Login extends React.Component {
             <div className='' style={{ height: '100vh', backgroundColor: '#f0f0f5' }}>
                 <div className='container px-5' >
                     <h1 className='p-3'>Login</h1>
-                    <form onSubmit={this.handleSubmit} className='mt-5'>
+                    <form onSubmit={this.handleSubmit} className='needs-validation mt-5' noValidate>
                         <div className="form-group">
                             <label>Email address</label>
                             <input onChange={this.handleEmailChange} value={this.state.email} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
-                            <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                            {/* <div className='invalid-feedback'>
+                                Please Enter a valid Email Address
+                            </div> */}
                         </div>
                         <div className="form-group">
                             <label>Password</label>

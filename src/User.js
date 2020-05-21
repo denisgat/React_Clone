@@ -10,6 +10,7 @@ function User(props) {
         const username = props.posts.filter(item => item.user_id === userId)[0].user.name
         const userposts = props.posts.filter(item => item.user_id === userId).map((item, index) => {
             let commentCount = item.comment.length
+            let postTime = new Date(item.created_at)
             return (
                 <div key={index} className='mt-3 border-dark rounded container bg-white text-dark pb-2'>
                     <div className='row ' style={{ minHeight: '20vh' }} >
@@ -23,7 +24,8 @@ function User(props) {
                         <div className='col-10'>
                             <div className='row mt-1'>
                                 <Link to={'/subreddit/' + item.subreddit.subredditname}><h5 className='ml-2'>r/{item.subreddit.subredditname}</h5></Link>
-                                <h6 className='ml-5 text-muted'>posted by u/{item.user.name}</h6>
+                                <h6 className='ml-5 mr-1 text-muted'>posted by u/{item.user.name}</h6>
+                                <h6 className='text-muted'> {props.timeChange(postTime)}</h6>
                             </div>
                             <div className='pl-3 py-3 row'>
                                 <Link to={'/post/' + item.id}><h5><strong>{item.title}</strong></h5></Link>

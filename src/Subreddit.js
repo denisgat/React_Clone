@@ -58,6 +58,7 @@ class Subreddit extends React.Component {
             // console.log(this.props.posts)
             const posts = this.props.posts.filter(item => item.subreddit.subredditname === this.state.subname).map((item, index) => {
                 let commentCount = item.comment.length
+                let postTime = new Date(item.created_at)
                 return (
                     <div key={index} className='mt-3 border-dark rounded container bg-white text-dark pb-2'>
                         <div className='row ' style={{ minHeight: '20vh' }} >
@@ -71,7 +72,8 @@ class Subreddit extends React.Component {
                             <div className='col-10'>
                                 <div className='row mt-1'>
                                     <h5 className='ml-2'>r/{item.subreddit.subredditname}</h5>
-                                    <h6 className='ml-5 text-muted'>posted by <Link to={'/user/' + item.user.id}>u/{item.user.name}</Link></h6>
+                                    <h6 className='ml-5 mr-1 text-muted'>posted by <Link to={'/user/' + item.user.id}>u/{item.user.name}</Link></h6>
+                                <h6 className='text-muted'>{this.props.timeChange(postTime)}</h6>
                                 </div>
                                 <div className='pl-3 py-3 row'>
                                     <Link to={'/post/' + item.id}><h5><strong>{item.title}</strong></h5></Link>
@@ -114,7 +116,7 @@ class Subreddit extends React.Component {
             return (
                 <div className='fa-3x'>
                     <h1>{this.state.subname} Subreddit</h1>
-                    <FontAwesomeIcon icon={faSync} spin />
+                    <FontAwesomeIcon icon={faSync} spin/>
                     <h6>Oops Looks like there are no posts for this Subreddit</h6>
                     <h6>Would you like to create the first post?</h6>
                     <Link to='/post/create' className='btn btn-lg btn-primary'>Create a post</Link>
