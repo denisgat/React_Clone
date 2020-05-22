@@ -19,7 +19,7 @@ class CreatePost extends React.Component {
 
         this.handleTitle = this.handleTitle.bind(this);
         this.handleBody = this.handleBody.bind(this);
-        // this.handleImg = this.handleImg.bind(this);
+        this.handleImg = this.handleImg.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSub = this.handleSub.bind(this);
         // this.handleSubuser = this.handleSubUser.bind(this);
@@ -51,11 +51,11 @@ class CreatePost extends React.Component {
         })
     }
 
-    // handleImg(event) {
-    //     this.setState({
-    //         img: event.target.value,
-    //     })
-    // }
+    handleImg(event) {
+        this.setState({
+            img: event.target.value,
+        })
+    }
 
     async handleSubmit(event) {
         event.preventDefault();
@@ -66,15 +66,15 @@ class CreatePost extends React.Component {
         // console.log(sub_id)
 
 
-        // console.log(this.state)
+        console.log(this.state)
 
 
         const data = {
             title: this.state.title,
             body: this.state.body,
             user_id: this.props.user.id,
-            subreddit_id: this.state.subreddit.id
-            // img: this.state.img
+            subreddit_id: this.state.subreddit.id,
+            img: this.state.img
         }
         // console.log(data)
 
@@ -126,16 +126,15 @@ class CreatePost extends React.Component {
                             </select>
                             <div className="form-group">
                                 <label>Post Title</label>
-                                <input onChange={this.handleTitle} value={this.state.title} type="text" className="form-control" id="exampleInputSubname" aria-describedby="emailHelp1" placeholder="Post Title" />
+                                <input onChange={this.handleTitle} value={this.state.title} type="text" className="form-control" id="exampleInputSubname" aria-describedby="emailHelp1" placeholder="Post Title" required/>
                             </div>
                             <div className="form-group">
                                 <label>Post Body</label>
-                                <textarea rows='5' onChange={this.handleBody} value={this.state.body} type="text" className="form-control" id="exampleInputDesc" aria-describedby="emailHelp2" placeholder="Post Body" />
+                                <textarea rows='5' onChange={this.handleBody} value={this.state.body} type="text" className="form-control" id="exampleInputDesc" aria-describedby="emailHelp2" placeholder="Post Body" required/>
                             </div>
                             <div action="upload.php" method="post">
-                                <label>Choose an image(can be left empty)</label>
-                                <br></br>
-                                <input type="file" name="fileToUpload" id="fileToUpload"></input>
+                                <label>Enter Image URL (can be left empty)</label>
+                                <input type="text" onChange={this.handleImg} className="form-control" id="fileToUpload"></input>
                             </div>
                             <br></br>
                             <input className='btn btn-lg btn-primary' type="submit" value="Create" />

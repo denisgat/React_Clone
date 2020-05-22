@@ -29,7 +29,7 @@ class SinglePost extends React.Component {
         e.preventDefault()
 
 
-        console.log(this.props, this.state)
+        // console.log(this.props, this.state)
 
         const data = {
             body: this.state.body,
@@ -67,7 +67,14 @@ class SinglePost extends React.Component {
             const thepost = this.props.posts.filter(item => item.id === this.state.post_id).map((item, index) => {
                 let commentCount = item.comment.length
                 let postTime = item.created_at
-                let postComments = item.comment.map((item, index) => {
+
+                const reversedComments = []
+                item.comment.map((item) => {
+                    reversedComments.unshift(item)
+                    return
+                })
+
+                let postComments = reversedComments.map((item, index) => {
                     let commenterId = parseInt(item.user_id)
                     let commenterName = this.props.users.find(item => item.id === commenterId).name
                     let commentTime = new Date(item.created_at)
@@ -114,7 +121,7 @@ class SinglePost extends React.Component {
                                         <br></br>
                                         <form id='commentForm' onSubmit={this.handleSubmit}>
                                             <div className='form-group'>
-                                                <h6 className='text-left'>comment as <Link to={'/user/' + item.user.id}>{item.user.name}</Link></h6>
+                                                <h6 className='text-left'>comment as <Link to={'/user/' + this.props.user.id}>{this.props.user.name}</Link></h6>
                                                 <textarea rows='3' onChange={this.handleBody} value={this.state.body} type="text" className="form-control" id="exampleInputDesc" aria-describedby="emailHelp2" placeholder="What are your thoughts?" />
                                             </div>
                                             <input className='mt-0 mb-5 btn btn-block btn-primary' type="submit" value="Comment" />
@@ -134,7 +141,7 @@ class SinglePost extends React.Component {
             })
 
             return (
-                <div className='pt-4' style={{ height: '100vh', backgroundColor: ' #e1e1ea' }}>
+                <div className='pt-4' style={{ minHeight: '100vh', height: '100%', backgroundColor: ' #e1e1ea' }}>
                     <span className=''>
                         {thepost}
                     </span>

@@ -73,14 +73,14 @@ class Login extends React.Component {
                     <form onSubmit={this.handleSubmit} className='needs-validation mt-5' noValidate>
                         <div className="form-group">
                             <label>Email address</label>
-                            <input onChange={this.handleEmailChange} value={this.state.email} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
+                            <input onChange={this.handleEmailChange} value={this.state.email} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required/>
                             {/* <div className='invalid-feedback'>
                                 Please Enter a valid Email Address
                             </div> */}
                         </div>
                         <div className="form-group">
                             <label>Password</label>
-                            <input onChange={this.handlePasswordChange} value={this.state.password} type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
+                            <input onChange={this.handlePasswordChange} value={this.state.password} type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" required/>
                         </div>
                         <input className='btn btn-lg btn-primary' type="submit" value="Login"/>
                     </form>

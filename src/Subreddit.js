@@ -56,7 +56,13 @@ class Subreddit extends React.Component {
         // console.log(this.state, this.props)
         if (this.state.posts.length > 0 && this.state.subinfo && this.props.subreddits.length > 0) {
             // console.log(this.props.posts)
-            const posts = this.props.posts.filter(item => item.subreddit.subredditname === this.state.subname).map((item, index) => {
+            const reversedPosts = []
+            this.props.posts.map((item) => {
+                reversedPosts.unshift(item)
+                return
+            })
+
+            const posts = reversedPosts.filter(item => item.subreddit.subredditname === this.state.subname).map((item, index) => {
                 let commentCount = item.comment.length
                 let postTime = new Date(item.created_at)
                 return (

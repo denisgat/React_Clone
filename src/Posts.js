@@ -6,9 +6,14 @@ import { faCommentAlt, faArrowUp, faArrowDown } from '@fortawesome/free-solid-sv
 
 function Posts(props) {
 
-    
+    const reversedPosts = []
+    props.posts.map((item)=>{
+        reversedPosts.unshift(item)
+        return
+    })
+    // console.log(props.posts,reversedPosts)
 
-    const postss = props.posts.map((item, index) => {
+    const allPosts = reversedPosts.map((item, index) => {
         let commentCount = item.comment.length
         let postTime = new Date(item.created_at)
         return (
@@ -29,6 +34,11 @@ function Posts(props) {
                         </div>
                         <div className='pl-2 py-3 row'>
                             <Link to={'/post/' + item.id}><h5>{item.title}</h5></Link>
+                            { item.image !== null ? 
+                            <img src={item.image} alt='post image'/>
+                            :
+                            <div></div>
+                            }
                         </div>
                         <hr className='pb-0'></hr>
                         <div className='pl-3 pt-0 row text-muted position-bottom'>
@@ -46,7 +56,7 @@ function Posts(props) {
         if (props.showposts === 'allposts') {
             return (
                 <div>
-                    {postss}
+                    {allPosts}
                 </div>
             )
 
@@ -61,7 +71,7 @@ function Posts(props) {
         // console.log(props.posts)
         return (
             <div>
-                {postss}
+                {allPosts}
             </div>
         )
     }
